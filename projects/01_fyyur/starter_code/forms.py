@@ -3,8 +3,6 @@ from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, HiddenField, BooleanField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import *
-import app
-
 
 class ShowForm(Form):
     artist_id = QuerySelectField(
