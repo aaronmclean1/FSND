@@ -1,19 +1,33 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Fyyur | Venues{% endblock %}
 {% block content %}
-{% for area in areas %}
+{% for area in city_state %}
 <h3>{{ area.city }}, {{ area.state }}</h3>
 	<ul class="items">
-		{% for venue in area.venues %}
-		<li>
-			<a href="/venues/{{ venue.id }}">
-				<i class="fas fa-music"></i>
-				<div class="item">
-					<h5>{{ venue.name }}</h5>
-				</div>
-			</a>
-		</li>
+		{% for venue in areas %}			
+			{% if venue.city == area.city and venue.state == area.state%}
+			<li>			
+				<a href="/venues/{{ venue.id }}" 
+				style="display:inline-block;" 
+				onclick="deleteData('/venues', {{ venue.id }})" title="Delete {{ venue.name }}!" 
+				>			
+					<i class="fas fa-trash" style="display:inline-block;"></i>
+				</a>
+				<a href="/venues/{{ venue.id }}/edit" style="display:inline-block;" title="Edit {{ venue.name }}">
+					<i class="fas fa-edit" style="display:inline-block;"></i>
+				</a>
+				<a href="/venues/{{ venue.id }}" style="display:inline-block;" title="View {{ venue.name }}">
+					<i class="fas fa-eye" style="display:inline-block;"></i>
+					<div class="item" style="display:inline-block;">
+						<h5> {{ venue.name }}</h5>				
+					</div>
+				</a>			
+			</li>
+			{% endif %}
 		{% endfor %}
-	</ul>
+	</ul>	
 {% endfor %}
+<h3>
+	<a href="/venues/create"><button class="btn btn-default btn-lg">Create a venue</button></a>
+</h3>
 {% endblock %}

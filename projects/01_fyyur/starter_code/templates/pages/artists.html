@@ -4,13 +4,26 @@
 <ul class="items">
 	{% for artist in artists %}
 	<li>
-		<a href="/artists/{{ artist.id }}">
-			<i class="fas fa-users"></i>
-			<div class="item">
-				<h5>{{ artist.name }}</h5>
+		<a href="/artists/{{ artist.id }}"
+		style="display:inline-block;"
+		onclick="deleteData('/artists', {{ artist.id }});return false;" title="Delete {{ artist.name }}!"
+		>
+			<i class="fas fa-trash" style="display:inline-block;"></i>
+		</a>
+		<a href="/artists/{{ artist.id }}/edit" style="display:inline-block;" title="Edit {{ artist.name }}">
+			<i class="fas fa-edit" style="display:inline-block;"></i>
+		</a>
+		<a href="/artists/{{ artist.id }}" style="display:inline-block;" title="View {{ artist.name }}">
+			<i class="fas fa-eye" style="display:inline-block;"></i>
+			<div class="item" style="display:inline-block;">
+				<h5> {{ artist.name }} | {{ artist.city }}, {{ artist.state }}</h5>
 			</div>
 		</a>
 	</li>
 	{% endfor %}
+	<h3>
+		<a href="/artists/create"><button class="btn btn-default btn-lg">Create an artist</button></a>
+	</h3>
 </ul>
 {% endblock %}
+

@@ -1,17 +1,55 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Fyyur | Shows{% endblock %}
 {% block content %}
-<div class="row shows">
-    {%for show in shows %}
-    <div class="col-sm-4">
-        <div class="tile tile-show">
-            <img src="{{ show.artist_image_link }}" alt="Artist Image" />
-            <h4>{{ show.start_time|datetime('full') }}</h4>
-            <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-            <p>playing at</p>
-            <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+    <h2 class="monospace">{{ response.future_count }} Upcoming {% if count == 1 %}Show{% else %}Shows{% endif %}</h2>
+    <div class="row">
+        {%for show in response.future_shows %}
+        <div class="col-sm-4">
+            <div class="tile tile-show">
+                <a href="/artists/{{ show.artist_id }}">
+                    <img src="{{ show.artist.image_link }}" alt="Show Artist Image" />
+                </a>
+                <h6>{{ show.start_time.strftime('%a %B %-d, %Y at %I:%M %p')}}</h6>
+                <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist.name }}</a>
+                playing at
+                <a href="/venues/{{ show.venue_id }}">{{ show.venue.name }}</a></h5>
+                <a href="/shows/{{ show.id }}"
+                onclick="deleteData('/shows', {{ show.id }});return false;" title="Delete!"
+                >
+                    <i class="fas fa-trash" ></i>
+                </a>
+                <a href="/shows/{{ show.id }}/edit">
+					<i class="fas fa-edit" ></i>
+				</a>
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
+    <h2 class="monospace">{{ response.past_count }} Past {% if count == 1 %}Show{% else %}Shows{% endif %}</h2>
+    <div class="row">
+        {%for show in response.past_shows %}
+        <div class="col-sm-4">
+            <div class="tile tile-show">
+                <a href="/artists/{{ show.artist_id }}">
+                    <img src="{{ show.artist.image_link }}" alt="Show Artist Image" />
+                </a>
+                <h6>{{ show.start_time.strftime('%a %B %-d, %Y at %I:%M %p')}}</h6>
+                <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist.name }}</a>
+                played at
+                <a href="/venues/{{ show.venue_id }}">{{ show.venue.name }}</a></h5>
+                <a href="/shows/{{ show.id }}"
+                onclick="deleteData('/shows', {{ show.id }});return false;" title="Delete!"
+                >
+                    <i class="fas fa-trash" ></i>
+                </a>
+                <a href="/shows/{{ show.id }}/edit">
+					<i class="fas fa-edit" ></i>
+				</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <h3>
+        <a href="/shows/create"><button class="btn btn-default btn-lg">Create a Show</button></a>
+    </h3>
 {% endblock %}

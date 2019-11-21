@@ -1,71 +1,144 @@
 {% extends 'layouts/main.html' %}
-{% block title %}{{ artist.name }} | Artist{% endblock %}
+{% block title %}Artist Search{% endblock %}
 {% block content %}
 <div class="row">
 	<div class="col-sm-6">
 		<h1 class="monospace">
-			{{ artist.name }}
+			{{ response.artist.name }}
 		</h1>
 		<p class="subtitle">
-			ID: {{ artist.id }}
+			ID: {{ response.artist.id }}
 		</p>
 		<div class="genres">
-			{% for genre in artist.genres %}
+			{% for genre in response.artist.genres %}
 			<span class="genre">{{ genre }}</span>
 			{% endfor %}
 		</div>
 		<p>
-			<i class="fas fa-globe-americas"></i> {{ artist.city }}, {{ artist.state }}
+			<i class="fas fa-globe-americas"></i>
+			<a
+				href="
+				https://www.google.com/maps/place/{{ response.artist.city }},
+				{{ response.artist.state }}"
+				target="_blank">
+				{{ response.artist.city }}, {{ response.artist.state }}
+			</a>
 		</p>
 		<p>
-			<i class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{% else %}No Phone{% endif %}
-        </p>
-        <p>
-			<i class="fas fa-link"></i> {% if artist.website %}<a href="{{ artist.website }}" target="_blank">{{ artist.website }}</a>{% else %}No Website{% endif %}
+			<i class="fas fa-map-marker"></i>
+			{% if response.artist.address %}
+				<a
+					href="
+					https://www.google.com/maps/place/{{ response.artist.city }},
+					{{ response.artist.state }},{{ response.artist.address }}"
+					target="_blank">
+					{{ response.artist.address }}
+				</a>
+			{% else %}
+				No Address
+			{% endif %}
 		</p>
 		<p>
-			<i class="fab fa-facebook-f"></i> {% if artist.facebook_link %}<a href="{{ artist.facebook_link }}" target="_blank">{{ artist.facebook_link }}</a>{% else %}No Facebook Link{% endif %}
-        </p>
-		{% if artist.seeking_venue %}
+			<i class="fas fa-phone-alt"></i>
+			{% if response.artist.phone %}
+				<a href="tel:{{ response.artist.phone }}" target="_blank">
+					{{ response.artist.phone }}
+				</a>
+			{% else %}
+				No Phone
+			{% endif %}
+		</p>
+		<p>
+			<i class="fas fa-link"></i>
+			{% if response.artist.website %}
+				<a href="{{ response.artist.website }}" target="_blank">
+					{{ response.artist.website }}
+				</a>
+			{% else %}
+				No Website
+			{% endif %}
+		</p>
+		<p>
+			<i class="fab fa-facebook-f"></i>
+			{% if response.artist.facebook_link %}
+				<a href="{{ response.artist.facebook_link }}" target="_blank">
+					{{ response.artist.facebook_link }}
+				</a>
+			{% else %}
+				No Facebook Link
+			{% endif %}
+		</p>
+		<p>
+			<i class="fas fa-edit"></i>
+			<a href="/artists/{{ response.artist.id }}/edit">
+				Edit {{ response.artist.name }}
+			</a>
+		</p>
+
+		{% if response.artist.seeking_talent == True %}
 		<div class="seeking">
-			<p class="lead">Currently seeking performance venues</p>
+			<p class="lead">Currently seeking talent</p>
 			<div class="description">
-				<i class="fas fa-quote-left"></i> {{ artist.seeking_description }} <i class="fas fa-quote-right"></i>
+				<i class="fas fa-quote-left"></i>
+				{{ response.artist.seeking_description }}
+				<i class="fas fa-quote-right"></i>
 			</div>
 		</div>
-		{% else %}	
+		{% else %}
 		<p class="not-seeking">
-			<i class="fas fa-moon"></i> Not currently seeking performance venues
+			<i class="fas fa-moon"></i> Not currently seeking talent
 		</p>
 		{% endif %}
 	</div>
 	<div class="col-sm-6">
-		<img src="{{ artist.image_link }}" alt="Venue Image" />
+		<img src="{{ response.artist.image_link }}" alt="Artist Image" />
 	</div>
 </div>
 <section>
-	<h2 class="monospace">{{ artist.upcoming_shows_count }} Upcoming {% if artist.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>
+	<h2 class="monospace">{{ response.future_count }} Upcoming {% if count == 1 %}Show{% else %}Shows{% endif %}</h2>
 	<div class="row">
-		{%for show in artist.upcoming_shows %}
+		{%for show in response.future_shows %}
 		<div class="col-sm-4">
 			<div class="tile tile-show">
-				<img src="{{ show.venue_image_link }}" alt="Show Venue Image" />
-				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
+				<a href="/venues/{{ show.venue_id }}">
+					<img src="{{ show.venue.image_link }}" alt="Show venue Image" />
+				</a>
+				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue.name }}</a></h5>
+				<h6>{{ show.start_time.strftime('%a %B %-d, %Y at %I:%M %p')}}</h6>
+                <a href="/shows/{{ show.id }}/edit">
+					<i class="fas fa-edit" ></i>
+				</a>
+				<a href="/shows/{{ show.id }}"
+				style="display:inline-block;"
+				onclick="deleteData('/shows', {{ show.id }});return false;" title="Delete!"
+				>
+					<i class="fas fa-trash" style="display:inline-block;"></i>
+				</a>
 			</div>
 		</div>
 		{% endfor %}
 	</div>
 </section>
 <section>
-	<h2 class="monospace">{{ artist.past_shows_count }} Past {% if artist.past_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>
+	<h2 class="monospace">{{ response.past_count }} Past {% if count == 1 %}Show{% else %}Shows{% endif %}</h2>
 	<div class="row">
-		{%for show in artist.past_shows %}
+		{%for show in response.past_shows %}
 		<div class="col-sm-4">
 			<div class="tile tile-show">
-				<img src="{{ show.venue_image_link }}" alt="Show Venue Image" />
-				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
+				<a href="/venues/{{ show.venue_id }}">
+					<img src="{{ show.venue.image_link }}" alt="Show venue Image" />
+				</a>
+				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue.name  }}</a></h5>
+				<h6>{{ show.start_time.strftime('%a %B %-d, %Y at %I:%M %p')}}</h6>
+                <a href="/shows/{{ show.id }}/edit">
+					<i class="fas fa-edit" ></i>
+				</a>
+				<a href="/shows/{{ show.id }}"
+				style="display:inline-block;"
+				onclick="deleteData('/shows', {{ show.id }});return false;" title="Delete!"
+				>
+					<i class="fas fa-trash" style="display:inline-block;"></i>
+				</a>
 			</div>
 		</div>
 		{% endfor %}

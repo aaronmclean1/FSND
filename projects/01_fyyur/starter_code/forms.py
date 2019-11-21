@@ -1,19 +1,28 @@
 from datetime import datetime
 from flask_wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, HiddenField, BooleanField, TextAreaField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
+from wtforms.validators import *
+import app
+
 
 class ShowForm(Form):
-    artist_id = StringField(
-        'artist_id'
+    artist_id = QuerySelectField(
+        'artist_id', validators=[DataRequired()],
+        query_factory=lambda: app.Artist.query,
+        get_label="name",
+        allow_blank=False
     )
-    venue_id = StringField(
-        'venue_id'
+    venue_id = QuerySelectField(
+        'venue_id', validators=[DataRequired()],
+        query_factory=lambda: app.Venue.query,
+        get_label="name",
+        allow_blank=False
     )
     start_time = DateTimeField(
         'start_time',
         validators=[DataRequired()],
-        default= datetime.today()
+        default= datetime.now()
     )
 
 class VenueForm(Form):
@@ -22,6 +31,12 @@ class VenueForm(Form):
     )
     city = StringField(
         'city', validators=[DataRequired()]
+    )
+    seeking_talent = BooleanField(
+        'seeking_talent'
+    )
+    seeking_description = StringField(
+        'seeking_description'
     )
     state = SelectField(
         'state', validators=[DataRequired()],
@@ -83,10 +98,10 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone'
+        'phone', validators=[DataRequired()]
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[URL()]
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
@@ -113,8 +128,16 @@ class VenueForm(Form):
             ('Other', 'Other'),
         ]
     )
+    # genres = QuerySelectMultipleField(
+    #     'genres', validators=[DataRequired()],
+    #     query_factory=lambda: app.Genre.query,
+    #     get_label="name"
+    # )
     facebook_link = StringField(
         'facebook_link', validators=[URL()]
+    )
+    website = StringField(
+        'website', validators=[URL()]
     )
 
 class ArtistForm(Form):
@@ -124,6 +147,19 @@ class ArtistForm(Form):
     city = StringField(
         'city', validators=[DataRequired()]
     )
+    seeking_description = StringField(
+        'seeking_description'
+    )
+    seeking_talent = BooleanField(
+        'seeking_talent'
+    )
+    # state = QuerySelectField(
+    #     'state', validators=[DataRequired()],
+    #     query_factory=lambda: app.State.query,
+    #     get_label="name",
+    #     allow_blank=False
+    # )
+
     state = SelectField(
         'state', validators=[DataRequired()],
         choices=[
@@ -181,12 +217,12 @@ class ArtistForm(Form):
         ]
     )
     phone = StringField(
-        # TODO implement validation logic for state
-        'phone'
+        'phone', validators=[DataRequired()],
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[URL()]
     )
+
     genres = SelectMultipleField(
         # TODO implement enum restriction
         'genres', validators=[DataRequired()],
@@ -212,9 +248,15 @@ class ArtistForm(Form):
             ('Other', 'Other'),
         ]
     )
+    # genres = QuerySelectMultipleField(
+    #     'genres', validators=[DataRequired()],
+    #     query_factory=lambda: app.Genre.query,
+    #     get_label="name"
+    # )
     facebook_link = StringField(
         # TODO implement enum restriction
         'facebook_link', validators=[URL()]
     )
-
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+    website = StringField(
+        'website', validators=[URL()]
+    )
