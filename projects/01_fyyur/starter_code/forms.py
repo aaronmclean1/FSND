@@ -3,17 +3,18 @@ from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, HiddenField, BooleanField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import *
+from models import Venue, Artist
 
 class ShowForm(Form):
     artist_id = QuerySelectField(
         'artist_id', validators=[DataRequired()],
-        query_factory=lambda: app.Artist.query,
+        query_factory=lambda: Artist.query,
         get_label="name",
         allow_blank=False
     )
     venue_id = QuerySelectField(
         'venue_id', validators=[DataRequired()],
-        query_factory=lambda: app.Venue.query,
+        query_factory=lambda: Venue.query,
         get_label="name",
         allow_blank=False
     )
@@ -148,8 +149,8 @@ class ArtistForm(Form):
     seeking_description = StringField(
         'seeking_description'
     )
-    seeking_talent = BooleanField(
-        'seeking_talent'
+    seeking_venue = BooleanField(
+        'seeking_venue'
     )
     # state = QuerySelectField(
     #     'state', validators=[DataRequired()],
