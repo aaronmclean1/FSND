@@ -8,6 +8,7 @@ from logging import Formatter, FileHandler
 from forms import ArtistForm, ShowForm, VenueForm
 import re
 import sys
+from sqlalchemy import exc
 
 from models import Venue, Show, Artist, app, db
 
@@ -336,15 +337,15 @@ def create_artist_submission():
     validate_phone_number()
 
     try:
-        setattr(create_artist, 'seeking_talent', False)
+        setattr(create_artist, 'seeking_venue', False)
 
         # Loop through the form results and update the artist model with the new values
         for keys, values in request.form.items():
-            # Seeking_talent is a checkbox and needs special handling
+            # seeking_venue is a checkbox and needs special handling
             # Genres is a multi select box and needs getlist to pull all items
-            if keys != 'seeking_talent' and keys != 'genres':
+            if keys != 'seeking_venue' and keys != 'genres':
                 setattr(create_artist, keys, values)
-            if keys == 'seeking_talent':
+            if keys == 'seeking_venue':
                 setattr(create_artist, keys, True)
             if keys == 'genres':
                 setattr(create_artist, keys, request.form.getlist('genres'))
