@@ -12,7 +12,6 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Models
-# ----------------------------------------------------------------------------#
 class Artist(db.Model):
     __tablename__ = 'artist'
     id = db.Column(db.Integer, primary_key=True)

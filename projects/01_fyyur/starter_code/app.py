@@ -1,5 +1,5 @@
 # Imports
-# ----------------------------------------------------------------------------#
+
 import babel
 import dateutil.parser
 from datetime import datetime
@@ -12,7 +12,8 @@ import sys
 from models import Venue, Show, Artist, app, db
 
 # Filters
-# ----------------------------------------------------------------------------#
+
+
 def format_datetime(value, format='medium'):
     date = dateutil.parser.parse(value)
     if format == 'full':
@@ -32,13 +33,11 @@ def validate_phone_number():
 app.jinja_env.filters['datetime'] = format_datetime
 
 # Controllers
-# ----------------------------------------------------------------------------#
 @app.route('/')
 def index():
     return render_template('pages/home.html')
 
 #  Venues
-#  ----------------------------------------------------------------
 @app.route('/venues')
 def venues():
     data = Venue.query.order_by(Venue.name.asc()).all()
@@ -80,7 +79,6 @@ def show_venue(venue_id):
     return render_template('pages/show_venue.html', response=response)
 
 #  Create Venue
-#  ----------------------------------------------------------------
 @app.route('/venues/create', methods=['GET'])
 def create_venue_form():
     form = VenueForm()
@@ -136,7 +134,6 @@ def create_venue_submission():
 
 
 #  Delete Venue
-#  ----------------------------------------------------------------
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
     try:
@@ -149,7 +146,6 @@ def delete_venue(venue_id):
     return jsonify({'success': True})
 
 #  Venue - Edit (Get and Post)
-#  ----------------------------------------------------------------
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
     # defines the venueForm Class from forms.py
@@ -218,7 +214,6 @@ def edit_venue_submission(venue_id):
         abort(500)
 
 #  Artists - Show List of Artists
-#  ----------------------------------------------------------------
 @app.route('/artists')
 def artists():
     # Get records from artist table sort alphabetically
@@ -226,7 +221,6 @@ def artists():
     return render_template('pages/artists.html', artists=data)
 
 #  Artists - Search Artists by search term
-#  ----------------------------------------------------------------
 @app.route('/artists/search', methods=['POST'])
 def search_artists():
     search_term = request.form.get('search_term', '')
@@ -261,7 +255,6 @@ def show_artist(artist_id):
     return render_template('pages/show_artist.html', response=response)
 
 #  Artists - Edit (Get and Post)
-#  ----------------------------------------------------------------
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
     # defines the ArtistForm Class from forms.py
@@ -330,7 +323,6 @@ def edit_artist_submission(artist_id):
         abort(500)
 
 #  Create Artist (Get and Post)
-#  ----------------------------------------------------------------
 @app.route('/artists/create', methods=['GET'])
 def create_artist_form():
     form = ArtistForm()
@@ -382,7 +374,6 @@ def create_artist_submission():
         abort(500)
 
 #  Delete Artist
-#  ----------------------------------------------------------------
 @app.route('/artists/<artist_id>', methods=['DELETE'])
 def delete_artist(artist_id):
     try:
@@ -395,7 +386,8 @@ def delete_artist(artist_id):
     return jsonify({'success': True})
 
 #  Shows
-#  ----------------------------------------------------------------
+
+
 @app.route('/shows')
 def shows():
     # Find future shows for artist_id
@@ -456,7 +448,6 @@ def create_show_submission():
     return render_template('pages/home.html')
 
 #  Delete Show
-#  ----------------------------------------------------------------
 @app.route('/shows/<show_id>', methods=['DELETE'])
 def delete_show(show_id):
 
@@ -471,7 +462,6 @@ def delete_show(show_id):
 
 
 #  Shows - Edit (Get and Post)
-#  ----------------------------------------------------------------
 @app.route('/shows/<int:show_id>/edit', methods=['GET'])
 def edit_show(show_id):
     # Query DB for a specific show and populate the HTML Form
@@ -501,7 +491,6 @@ def edit_show_submission(show_id):
 
 
 #  Error Handlers
-#  ----------------------------------------------------------------
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
@@ -523,9 +512,8 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
 
-# ----------------------------------------------------------------------------#
+
 # Launch
-# ----------------------------------------------------------------------------#
 
 # Default port:
 if __name__ == '__main__':
@@ -535,5 +523,4 @@ if __name__ == '__main__':
 '''
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-'''
+    app.run(host='0.0.0.0', port=port)'''

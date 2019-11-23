@@ -5,6 +5,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleF
 from wtforms.validators import *
 from models import Venue, Artist
 
+
 class ShowForm(Form):
     artist_id = QuerySelectField(
         'artist_id', validators=[DataRequired()],
@@ -21,8 +22,9 @@ class ShowForm(Form):
     start_time = DateTimeField(
         'start_time',
         validators=[DataRequired()],
-        default= datetime.now()
+        default=datetime.now()
     )
+
 
 class VenueForm(Form):
     name = StringField(
@@ -138,6 +140,7 @@ class VenueForm(Form):
     website = StringField(
         'website', validators=[URL()]
     )
+
 
 class ArtistForm(Form):
     name = StringField(
