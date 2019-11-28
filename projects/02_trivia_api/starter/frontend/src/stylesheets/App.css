@@ -24,7 +24,11 @@ h2 {
 li {
   text-align: center;
   margin: 5px 0px;
+  cursor: pointer;
 }
+li.pointer {
+    cursor: pointer;
+    }
 
 ul {
   list-style-type: none;

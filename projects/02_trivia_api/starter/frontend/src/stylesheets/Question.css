@@ -72,4 +72,5 @@ img.category {
 
 img.delete {
   width: 20px;
+  cursor: pointer;
 }

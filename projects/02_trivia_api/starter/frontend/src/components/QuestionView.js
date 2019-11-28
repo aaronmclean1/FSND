@@ -119,6 +119,11 @@ class QuestionView extends Component {
     }
   }
 
+  //Get the Category value and return the key
+  getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+
   render() {
     return (
       <div className="question-view">
@@ -126,9 +131,9 @@ class QuestionView extends Component {
           <h2 onClick={() => {this.getQuestions()}}>Categories</h2>
           <ul>
             {Object.keys(this.state.categories).map((id, ) => (
-              <li key={id} onClick={() => {this.getByCategory(id)}}>
-                {this.state.categories[id]}
-                <img title={id} className="category" src={`${this.state.categories[id].toLowerCase()}.svg`}/>
+              <li key={this.state.categories[id]} onClick={() => {this.getByCategory(this.state.categories[id])}}>
+                {id}
+                <img title={this.state.categories[id]} className="category" src={`${id.toLowerCase()}.svg`}/>
               </li>
             ))}
           </ul>
@@ -141,7 +146,7 @@ class QuestionView extends Component {
               key={q.id}
               question={q.question}
               answer={q.answer}
-              category={this.state.categories[q.category]}
+              category={this.getKeyByValue(this.state.categories,q.category.toString())}
               difficulty={q.difficulty}
               questionAction={this.questionAction(q.id)}
             />
