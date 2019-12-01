@@ -1,4 +1,3 @@
-import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
@@ -110,9 +109,11 @@ class Trivia_Test(unittest.TestCase):
 
     # Test categories by ID - PASS
     def test_categories_by_id_pass(self):
+        categories = Category.query.first()
 
         # Get questions by category id
-        response = self.client().get('/questions/category=3')
+        response = self.client().get(
+            '/questions/category=' + str(categories.id))
         data = json.loads(response.data.decode('utf-8'))
 
         # Make sure 200 is status and success is returned
@@ -132,7 +133,8 @@ class Trivia_Test(unittest.TestCase):
 
     # Test create question - PASS
     def test_create_question_pass(self):
-        response = self.client().post('/questions/create', json=self.question_1)
+        response = self.client().post('/questions/create',
+                                      json=self.question_1)
         data = json.loads(response.data.decode('utf-8'))
 
         self.assertEqual(response.status_code, 200)
@@ -140,13 +142,14 @@ class Trivia_Test(unittest.TestCase):
 
     # Test create question - FAIL
     def test_create_question_fail(self):
-        response = self.client().post('/questions/create', json=self.question_2)
+        response = self.client().post('/questions/create',
+                                      json=self.question_2)
         data = json.loads(response.data.decode('utf-8'))
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data['success'], False)
 
-   # Test search questions - PASS
+    # Test search questions - PASS
     def test_search_questions_pass(self):
 
         # Get questions by search
@@ -158,7 +161,7 @@ class Trivia_Test(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
 
-   # Test search questions - FAIL
+    # Test search questions - FAIL
     def test_search_questions_fail(self):
 
         # Get questions by search
@@ -170,11 +173,15 @@ class Trivia_Test(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)
 
-   # Test delete question - PASS
+    # Test delete question - PASS
     def test_delete_questions_pass(self):
 
-        # Get questions by search
-        response = self.client().delete('/questions/39')
+        # Add a new question to be deleted
+        question = Question('My Question', 'My Answer', 1, 2)
+        question.insert()
+
+        # Delete question
+        response = self.client().delete('/questions/' + str(question.id))
         data = json.loads(response.data.decode('utf-8'))
 
         # Make sure 200 is status and success is returned
@@ -182,7 +189,7 @@ class Trivia_Test(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['deleted'])
 
-   # Test delete question - FAIL
+    # Test delete question - FAIL
     def test_delete_questions_fail(self):
 
         # Get questions by search
@@ -193,11 +200,21 @@ class Trivia_Test(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)
 
-   # Test quiz - PASS
+    # Test quiz - PASS
     def test_quiz_pass(self):
 
-        # Get questions by search
-        response = self.client().post('/quizzes', json=self.quiz_1)
+        # Add a new question to be in the quiz
+        question = Question('My Question', 'My Answer', 1, 2)
+        question.insert()
+
+        # get categories for quiz
+        categories = Category.query.first()
+
+        # Post Quiz
+        response = self.client().post(
+            '/quizzes', json={'previous_questions': [question.id],
+                              'quiz_category': {'type': categories.type,
+                                                'id': categories.id}})
         data = json.loads(response.data.decode('utf-8'))
 
         # Make sure 200 is status and success is returned
@@ -205,10 +222,10 @@ class Trivia_Test(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['question'])
 
-   # Test quiz - FAIL
+    # Test quiz - FAIL
     def test_quiz_fail(self):
 
-        # Get questions by search
+        # Post Quiz
         response = self.client().post('/quizzes', json=self.quiz_2)
         data = json.loads(response.data.decode('utf-8'))
 

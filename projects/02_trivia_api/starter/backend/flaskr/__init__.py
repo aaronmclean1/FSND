@@ -1,6 +1,7 @@
 
 from flask import Flask, request, abort, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
+# from flask_cors import CORS
 from models import setup_db, Question, Category
 import random
 
@@ -12,7 +13,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
 
-    # The CORS code below is not needed for this site since @cross_origin handles it.
+    # The CORS code below is not needed since @cross_origin handles it.
     '''
     CORS(app, resources={'/': {'origins': '*'}})
 
@@ -96,7 +97,7 @@ def create_app(test_config=None):
             abort(404)
 
         question_data = Question.query.filter_by(
-            category=id).order_by(Question.question.asc()).all()
+            category=str(id)).order_by(Question.question.asc()).all()
 
         # abort 404 if no questions
         if (question_data is None):
@@ -149,7 +150,9 @@ def create_app(test_config=None):
         req_data = request.get_json()
 
         question_data = Question.query.filter(
-            Question.question.ilike("%" + req_data['searchTerm'] + "%")).order_by(Question.question.asc()).all()
+            Question.question.ilike(
+                "%" + req_data['searchTerm'] + "%")).order_by(
+                    Question.question.asc()).all()
 
         questions = questions_by_page(request, question_data)
         if len(questions) == 0:
@@ -207,10 +210,10 @@ def create_app(test_config=None):
             category = request_data['quiz_category']['id']
             # Get the previous question from the JSON
             previous_questions = request_data['previous_questions']
-        except:
+        except KeyError:
             abort(500)
 
-        # Query the DB and filter on category. The DB does not have a 0 category
+        # Query the DB and filter on category. DB does not have a 0 category
         if category != 0:
             current_q_data = Question.query.filter_by(category=category)
         else:
@@ -244,7 +247,7 @@ def create_app(test_config=None):
         # Send the response back to the JS
         return jsonify(response)
 
-    # @TODO: Create error handlers for all expected errors including 404 and 422.
+    # @TODO: Create error handlers
     @app.errorhandler(400)
     def bad_request(error):
         response = {
