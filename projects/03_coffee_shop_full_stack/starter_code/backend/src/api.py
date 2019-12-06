@@ -51,10 +51,18 @@ def short_drinks():
 @app.route('/drinks-detail', methods=['GET'])
 def long_drinks():
     data = Drink.query.order_by(Drink.title.asc()).all()
+    for row in data:
+
+        print(row.id)
+        print(row.title)
+        print(row.recipe)
+
+    # questions = [question.format() for question in selection]
+
     # Figure out how to show data.long()
     response = {
         'success': True,
-        'drinks': data
+        'drinks': 'hi'
     }
 
     return jsonify(response)
@@ -69,7 +77,7 @@ def long_drinks():
         or appropriate status code indicating reason for failure
 '''
 # Add a drink
-@app.route('/drinks/create', methods=['POST'])
+@app.route('/drinks', methods=['POST'])
 @cross_origin()  # Handling CORs at the route level is more granular.
 def add_drinks():
 
@@ -83,7 +91,15 @@ def add_drinks():
 
         # Make sure title and recipe are not blank
         if req_data['title'] != '' and req_data['recipe'] != '':
-            Drinks(req_data['title'], req_data['recipe']).insert()
+
+            # This doesn't work. The array is wrong
+            Drink(title= req_data['title'], recipe=str(req_data['recipe'])).insert()
+
+            #this works
+            # Drink(title= req_data['title']).insert()
+            print(str(req_data['recipe']))
+            # drink = Drink(title=req_title, recipe=req_recipe)
+            # drink.insert()
         else:
             abort(400)
     else:
@@ -104,7 +120,7 @@ def add_drinks():
         or appropriate status code indicating reason for failure
 '''
 # Update a drink
-@app.route('/drinks/create', methods=['PATCH'])
+@app.route('/drinks/<int:id>', methods=['PATCH'])
 @cross_origin()  # Handling CORs at the route level is more granular.
 def update_drinks():
 
@@ -131,7 +147,7 @@ def update_drinks():
 # Delete drinks by ID
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 def delete_drinks(id):
-    data = Drinks.query.filter_by(id=id).one_or_none()
+    data = Drink.query.filter_by(id=id).one_or_none()
     # abort 404 if no drinks
     if (data is None):
         abort(404)
