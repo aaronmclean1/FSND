@@ -53,11 +53,10 @@ def short_drinks_by_id(id):
         return jsonify(response)
 
 
-#@TODO require the 'get:drinks-detail' permission
-
 #  Get Long Drinks
 @app.route('/drinks-detail', methods=['GET'], strict_slashes=False)
-def long_drinks():
+@requires_auth('get:drinks-detail')
+def long_drinks(jwt):
     data = Drink.query.order_by(Drink.title.asc()).all()
     # abort 404 if no drinks
     if (data is None):
@@ -71,12 +70,11 @@ def long_drinks():
         return jsonify(response)
 
 
-# @TODO 'post:drinks' permission
-
 # Add a drink
 @app.route('/drinks', methods=['POST'])
 @cross_origin()  # Handling CORs at the route level is more granular.
-def add_drinks():
+@requires_auth('post:drinks')
+def add_drinks(jwt):
 
     # Get the JSON request
     req_data = request.get_json()
@@ -105,7 +103,8 @@ def add_drinks():
 # Update a drink
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @cross_origin()  # Handling CORs at the route level is more granular.
-def update_drinks(id):
+@requires_auth('patch:drinks')
+def update_drinks(jwt, id):
     req_data = request.get_json()
     data = Drink.query.filter_by(id=id).one_or_none()
 
@@ -136,7 +135,8 @@ def update_drinks(id):
 
 # Delete drinks by ID
 @app.route('/drinks/<int:id>', methods=['DELETE'])
-def delete_drinks(id):
+@requires_auth('delete:drinks')
+def delete_drinks(jwt, id):
     data = Drink.query.filter_by(id=id).one_or_none()
     # abort 404 if no drinks
     if (data is None):
