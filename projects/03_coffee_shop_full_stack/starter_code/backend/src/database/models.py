@@ -53,7 +53,7 @@ class Drink(db.Model):
     def short(self):
         # print(json.loads(self.recipe))
         # print (self.title)
-        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
+        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe.replace("\'", "\""))]
         return {
             'id': self.id,
             'title': self.title,
@@ -68,7 +68,7 @@ class Drink(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'recipe': json.loads(self.recipe)
+            'recipe': json.loads(self.recipe.replace("\'", "\""))
         }
 
     '''
@@ -83,6 +83,11 @@ class Drink(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
+        return {
+            'id': self.id,
+            'title': self.title,
+            'recipe': json.loads(self.recipe.replace("\'", "\""))
+        }
 
     '''
     delete()

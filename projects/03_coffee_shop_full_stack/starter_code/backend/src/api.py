@@ -18,71 +18,66 @@ CORS(app)
 '''
 # db_drop_and_create_all()
 
-## ROUTES
-'''
-@TODO implement endpoint
-    GET /drinks
-        it should be a public endpoint
-        it should contain only the drink.short() data representation
-    returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
-        or appropriate status code indicating reason for failure
-'''
-#  Drinks
-@app.route('/drinks', methods=['GET'])
+#  Get Short Drinks
+@app.route('/drinks', methods=['GET'], strict_slashes=False)
 def short_drinks():
     data = Drink.query.order_by(Drink.title.asc()).all()
-    # Figure out how to show data.short()
-    response = {
-        'success': True,
-        'drinks': data
-    }
 
-    return jsonify(response)
+    # abort 404 if no drinks
+    if (data is None):
+        abort(404)
+    else:
+        drinks = [drinks.short() for drinks in data]
 
-'''
-@TODO implement endpoint
-    GET /drinks-detail
-        it should require the 'get:drinks-detail' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
-        or appropriate status code indicating reason for failure
-'''
-#  Drinks
-@app.route('/drinks-detail', methods=['GET'])
+        response = {
+            'success': True,
+            'drinks': drinks
+        }
+
+        return jsonify(response)
+
+# Get Short Drinks by ID
+@app.route('/drinks/<int:id>', methods=['GET'])
+def short_drinks_by_id(id):
+    data = Drink.query.filter_by(id=id).first()
+
+    # abort 404 if no drinks
+    if (data is None):
+        abort(404)
+    else:
+        drinks = data.short()
+        response = {
+            'success': True,
+            'drinks': drinks
+        }
+        return jsonify(response)
+
+
+#@TODO require the 'get:drinks-detail' permission
+
+#  Get Long Drinks
+@app.route('/drinks-detail', methods=['GET'], strict_slashes=False)
 def long_drinks():
     data = Drink.query.order_by(Drink.title.asc()).all()
-    for row in data:
+    # abort 404 if no drinks
+    if (data is None):
+        abort(404)
+    else:
+        drinks = [drinks.long() for drinks in data]
+        response = {
+            'success': True,
+            'drinks': drinks
+        }
+        return jsonify(response)
 
-        print(row.id)
-        print(row.title)
-        print(row.recipe)
 
-    # questions = [question.format() for question in selection]
+# @TODO 'post:drinks' permission
 
-    # Figure out how to show data.long()
-    response = {
-        'success': True,
-        'drinks': 'hi'
-    }
-
-    return jsonify(response)
-
-'''
-@TODO implement endpoint
-    POST /drinks
-        it should create a new row in the drinks table
-        it should require the 'post:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
-        or appropriate status code indicating reason for failure
-'''
 # Add a drink
 @app.route('/drinks', methods=['POST'])
 @cross_origin()  # Handling CORs at the route level is more granular.
 def add_drinks():
 
-    success = True
-
     # Get the JSON request
     req_data = request.get_json()
 
@@ -91,57 +86,52 @@ def add_drinks():
 
         # Make sure title and recipe are not blank
         if req_data['title'] != '' and req_data['recipe'] != '':
-
-            # This doesn't work. The array is wrong
-            Drink(title= req_data['title'], recipe=str(req_data['recipe'])).insert()
-
-            #this works
-            # Drink(title= req_data['title']).insert()
-            print(str(req_data['recipe']))
-            # drink = Drink(title=req_title, recipe=req_recipe)
-            # drink.insert()
+            try:
+                new_drink = Drink(title= req_data['title'], recipe=str(req_data['recipe'])).insert()
+                response = {
+                    'success': True,
+                    'drinks': new_drink
+                }
+                return jsonify(response)
+            except exc.IntegrityError as e:
+                abort(409)
         else:
             abort(400)
     else:
         abort(400)
 
-    # return success or error
-    return jsonify({'success': success})
+# @TODO 'patch:drinks' permission
 
-'''
-@TODO implement endpoint
-    PATCH /drinks/<id>
-        where <id> is the existing model id
-        it should respond with a 404 error if <id> is not found
-        it should update the corresponding row for <id>
-        it should require the 'patch:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
-        or appropriate status code indicating reason for failure
-'''
 # Update a drink
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @cross_origin()  # Handling CORs at the route level is more granular.
-def update_drinks():
-
-    success = True
-
-    # Get the JSON request
+def update_drinks(id):
     req_data = request.get_json()
+    data = Drink.query.filter_by(id=id).one_or_none()
 
-    # If the title or recipe are missing throw an error
-    if 'title' in req_data and 'recipe' in req_data:
-
-        # Make sure title and recipe are not blank
-        if req_data['title'] != '' and req_data['recipe'] != '':
-            Drinks(req_data['title'], req_data['recipe']).insert()
+    # abort 404 if no drinks
+    if (data is None):
+        abort(404)
+    else:
+        # If the title or recipe are missing throw an error
+        if 'title' in req_data and 'recipe' in req_data:
+            if req_data['title'] != '' and req_data['recipe'] != '':
+                data.title = req_data['title']
+                data.recipe = str(req_data['recipe'])
+                try:
+                    data.update()
+                    drinks = data.long()
+                    response = {
+                        'success': True,
+                        'drinks': drinks
+                    }
+                    return jsonify(response)
+                except exc.IntegrityError as e:
+                    abort(409)
+            else:
+                abort(400)
         else:
             abort(400)
-    else:
-        abort(400)
-
-    # return success or error
-    return jsonify({'success': success})
 
 
 # Delete drinks by ID
@@ -153,7 +143,11 @@ def delete_drinks(id):
         abort(404)
     else:
         data.delete()
-        return jsonify({'success': True, 'deleted': id})
+        response = {
+            'success': True,
+            'deleted': id
+        }
+        return jsonify(response)
 
 # Error Handling
 @app.errorhandler(400)
@@ -173,6 +167,15 @@ def resource_not_found(error):
         "message": "Resource Not Found"
     }
     return jsonify(response), 404
+
+@app.errorhandler(409)
+def resource_not_found(error):
+    response = {
+        "success": False,
+        "error": 409,
+        "message": "Conflict"
+    }
+    return jsonify(response), 409
 
 @app.errorhandler(422)
 def unprocessable_entity(error):
