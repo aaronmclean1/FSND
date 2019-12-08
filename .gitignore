@@ -11,3 +11,6 @@ venv
 .Trashes
 ehthumbs.db
 Thumbs.db
+projects/03_coffee_shop_full_stack/starter_code/backend/src/database/database.db
+projects/03_coffee_shop_full_stack/starter_code/frontend/package-lock.json
+projects/03_coffee_shop_full_stack/starter_code/frontend/package.json
