@@ -126,7 +126,6 @@ def verify_decode_jwt(token):
 
 
 def check_permissions(permission, payload):
-    print(payload)
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
@@ -142,8 +141,6 @@ def check_permissions(permission, payload):
 
 
 def requires_auth(permission):
-    print(permission)
-
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -157,16 +154,3 @@ def requires_auth(permission):
 
         return wrapper
     return requires_auth_decorator
-
-
-@app.route('/headers')
-def headers():
-    return 'undefined'
-
-
-@app.route('/image')
-# Send the allowed permissions get:images
-@requires_auth('get:images')
-def images(jwt):
-    # print(jwt)
-    return 'You are worthy!'

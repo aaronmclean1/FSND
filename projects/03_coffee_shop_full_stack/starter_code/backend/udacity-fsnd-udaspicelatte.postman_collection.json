@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e8ad44ee-7536-4901-913c-46e718d56d9f",
+		"_postman_id": "b46cc7cf-f186-4e34-b151-b390fe233055",
 		"name": "udacity-fsnd-udaspicelatte",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -23,22 +23,27 @@
 									"pm.test(\"value contains drinks array\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.drinks).to.be.an('array')",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/drinks",
+							"raw": "{{host}}/drinks/",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"drinks"
+								"drinks",
+								""
 							]
 						}
 					},
@@ -61,6 +66,9 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -92,8 +100,15 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"drink 81\",\n\n\t\"recipe\":[\n\t  {\n\t     \"color\":\"#ffffff\",\n\t     \"name\":\"fff\",\n\t     \"parts\":\"5\"\n\t  },\n\t  {\n\t     \"color\":\"#aaaaa\",\n\t     \"name\":\"aaaaa\",\n\t     \"parts\":\"1\"\n\t  },\n\t  {\n\t     \"color\":\"#adf4fe\",\n\t     \"name\":\"juice5\",\n\t     \"parts\":\"1\"\n\t  }\t\t  \n\t]\t\n}\n"
+						},
 						"url": {
 							"raw": "{{host}}/drinks",
 							"host": [
@@ -123,8 +138,15 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"drink 81\",\n\n\t\"recipe\":[\n\t  {\n\t     \"color\":\"#ffffff\",\n\t     \"name\":\"fff\",\n\t     \"parts\":\"5\"\n\t  },\n\t  {\n\t     \"color\":\"#aaaaa\",\n\t     \"name\":\"aaaaa\",\n\t     \"parts\":\"1\"\n\t  },\n\t  {\n\t     \"color\":\"#adf4fe\",\n\t     \"name\":\"juice5\",\n\t     \"parts\":\"1\"\n\t  }\t\t  \n\t]\t\n}\n"
+						},
 						"url": {
 							"raw": "{{host}}/drinks/1",
 							"host": [
@@ -155,6 +177,9 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -170,7 +195,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "barista",
@@ -190,15 +216,33 @@
 									"pm.test(\"value contains drinks array\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.drinks).to.be.an('array')",
-									"});"
+									"});",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{host}}/drinks",
 							"host": [
@@ -221,15 +265,32 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{host}}/drinks-detail",
 							"host": [
@@ -264,13 +325,23 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik4wTkNOVEEzTWpaQ1FUa3lRMEl6TmtORk0wWXhRVFUwT1RFMFFVVkNSRUpDT1RBME1EUXpOUSJ9.eyJpc3MiOiJodHRwczovL3VkYWNpdHktZnNuZC5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDY3MTQ4MTQ0MTcwNjk3MTI4OTMiLCJhdWQiOlsiZGV2IiwiaHR0cHM6Ly91ZGFjaXR5LWZzbmQuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU2MDg5MDE2MCwiZXhwIjoxNTYwODk3MzYwLCJhenAiOiJPSjVwQk9ZSURFa09FVFVmUWo1ajdsSDZFTFcwMkd1MCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6ZHJpbmtzIiwiZ2V0OmRyaW5rcy1kZXRhaWwiXX0.j9ocW47_exQOkEa10ffh8eijGvrIMxnGRzCmbrXnfaN_8ULsgA7AnWYMtvP8RmPWvT9n8sReWnFuJajUHBUbnBO2GuJ4aM3-WDUBeJT0X_mpGUWs4lxaNTbIkWdiWPTsEiRnP3wT-dU_v3Olw2PB4UMajMIjSH-IdF2Y1CiJIOaM0gV44RGZRyRvj6C2_mOkMfoXxzw-HrVvTRCo1NcUPea5Bs04POni7azx-B7FstP_HLm0dEbbge4XbmovHwlIXknIoI8PbuGXeLBqE2hv8fErKFBuIykxzK0nErH5zSPCrkM-_9smb8TLGAH-E5j1KQb6SHDKtcV_QHnsUYFuXA",
+									"value": "{{mytoken}}",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"drink 81\",\n\n\t\"recipe\":[\n\t  {\n\t     \"color\":\"#ffffff\",\n\t     \"name\":\"fff\",\n\t     \"parts\":\"5\"\n\t  },\n\t  {\n\t     \"color\":\"#aaaaa\",\n\t     \"name\":\"aaaaa\",\n\t     \"parts\":\"1\"\n\t  },\n\t  {\n\t     \"color\":\"#adf4fe\",\n\t     \"name\":\"juice5\",\n\t     \"parts\":\"1\"\n\t  }\t\t  \n\t]\t\n}\n"
+						},
 						"url": {
 							"raw": "{{host}}/drinks",
 							"host": [
@@ -300,8 +371,28 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"drink 81\",\n\n\t\"recipe\":[\n\t  {\n\t     \"color\":\"#ffffff\",\n\t     \"name\":\"fff\",\n\t     \"parts\":\"5\"\n\t  },\n\t  {\n\t     \"color\":\"#aaaaa\",\n\t     \"name\":\"aaaaa\",\n\t     \"parts\":\"1\"\n\t  },\n\t  {\n\t     \"color\":\"#adf4fe\",\n\t     \"name\":\"juice5\",\n\t     \"parts\":\"1\"\n\t  }\t\t  \n\t]\t\n}\n"
+						},
 						"url": {
 							"raw": "{{host}}/drinks/1",
 							"host": [
@@ -332,8 +423,24 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{host}}/drinks/1",
 							"host": [
@@ -379,7 +486,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "manager",
@@ -399,22 +507,80 @@
 									"pm.test(\"value contains drinks array\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.drinks).to.be.an('array')",
-									"});"
+									"});",
+									"",
+									"// make sure we have a good response code",
+									"if (responseCode.code == 200)",
+									"{",
+									"    // loop through json and find the next available drink id",
+									"    var jsonData = pm.response.json();",
+									"    var next_id = 0;",
+									"    for( let prop in jsonData )",
+									"    {",
+									"        data = jsonData[prop];",
+									"        for( var key in data )",
+									"        {",
+									"           if (data.hasOwnProperty(key)) {",
+									"              ",
+									"              if (data[key].id > next_id)",
+									"              {",
+									"                  next_id = data[key].id;",
+									"              }",
+									"           }        ",
+									"        }",
+									"    }",
+									"    ",
+									"    // set next drink id to a global var",
+									"    pm.globals.set(\"next_id\", next_id + 1);",
+									"    console.log(pm.globals.get(\"next_id\"))",
+									"    ",
+									"    // set random size vars",
+									"    var r_1 = Math.floor(Math.random() * 5) + 1;",
+									"    var r_2 = Math.floor(Math.random() * 5) + 1;",
+									"    var r_3 = Math.floor(Math.random() * 5) + 1;",
+									"    ",
+									"    pm.globals.set(\"r_1\", r_1);",
+									"    pm.globals.set(\"r_2\", r_2);",
+									"    pm.globals.set(\"r_3\", r_3);",
+									"    ",
+									"    // set random colors",
+									"    var c_1 = Math.floor(Math.random()*16777215).toString(16);",
+									"    var c_2 = Math.floor(Math.random()*16777215).toString(16);",
+									"    var c_3 = Math.floor(Math.random()*16777215).toString(16);",
+									"    ",
+									"    pm.globals.set(\"c_1\", c_1);",
+									"    pm.globals.set(\"c_2\", c_2);",
+									"    pm.globals.set(\"c_3\", c_3);    ",
+									"}",
+									"",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/drinks",
+							"raw": "{{host}}/drinks/",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"drinks"
+								"drinks",
+								""
 							]
 						}
 					},
@@ -435,13 +601,71 @@
 									"pm.test(\"value contains drinks array\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.drinks).to.be.an('array')",
-									"});"
+									"});",
+									"",
+									"var randomColor = Math.floor(Math.random()*16777215).toString(16);",
+									"",
+									"",
+									"",
+									"// make sure we have a good response code",
+									"if (responseCode.code == 200)",
+									"{",
+									"    // loop through json and find the next available drink id",
+									"    var jsonData = pm.response.json();",
+									"    var next_id = 0;",
+									"    for( let prop in jsonData )",
+									"    {",
+									"        data = jsonData[prop];",
+									"        for( var key in data )",
+									"        {",
+									"           if (data.hasOwnProperty(key)) {",
+									"              ",
+									"              if (data[key].id > next_id)",
+									"              {",
+									"                  next_id = data[key].id;",
+									"              }",
+									"           }        ",
+									"        }",
+									"    }",
+									"    ",
+									"    // set next drink id to a global var",
+									"    pm.globals.set(\"next_id\", next_id + 1);",
+									"    console.log(pm.globals.get(\"next_id\"))",
+									"    ",
+									"    // set random size vars",
+									"    var r_1 = Math.floor(Math.random() * 5) + 1;",
+									"    var r_2 = Math.floor(Math.random() * 5) + 1;",
+									"    var r_3 = Math.floor(Math.random() * 5) + 1;",
+									"    ",
+									"    pm.globals.set(\"r_1\", r_1);",
+									"    pm.globals.set(\"r_2\", r_2);",
+									"    pm.globals.set(\"r_3\", r_3);",
+									"    ",
+									"    // set random colors",
+									"    var c_1 = Math.floor(Math.random()*16777215).toString(16);",
+									"    var c_2 = Math.floor(Math.random()*16777215).toString(16);",
+									"    var c_3 = Math.floor(Math.random()*16777215).toString(16);",
+									"    ",
+									"    pm.globals.set(\"c_1\", c_1);",
+									"    pm.globals.set(\"c_2\", c_2);",
+									"    pm.globals.set(\"c_3\", c_3);",
+									"}"
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -464,15 +688,36 @@
 							"script": {
 								"id": "5050a5b9-2e15-474e-9981-0e61ec8d2ff1",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"if(pm.response.to.have.status(200))",
+									"{",
+									"    pm.test(\"value contains drinks object\", function () {",
+									"        var jsonData = pm.response.json();",
+									"        pm.expect(jsonData.drinks).to.be.an('object')",
+									"        pm.globals.set(\"drink_id\", jsonData['drinks']['id']);",
+									"        ",
+									"    });",
+									"}",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -484,15 +729,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Water3\",\n    \"recipe\": {\n        \"name\": \"Water\",\n        \"color\": \"blue\",\n        \"parts\": 1\n    }\n}"
+							"raw": "{\n\t\"title\":\"Drink #{{next_id}}\",\n\n\t\"recipe\":[\n\t  {\n\t     \"color\":\"#{{c_1}}\",\n\t     \"name\":\"Vodka\",\n\t     \"parts\":\"{{r_1}}\"\n\t  },\n\t  {\n\t     \"color\":\"#{{c_2}}\",\n\t     \"name\":\"Black Tea\",\n\t     \"parts\":\"{{r_2}}\"\n\t  },\n\t  {\n\t     \"color\":\"#{{c_3}}\",\n\t     \"name\":\"Orange Juice\",\n\t     \"parts\":\"{{r_3}}\"\n\t  }\t\t  \n\t]\t\n}\n"
 						},
 						"url": {
-							"raw": "{{host}}/drinks",
+							"raw": "{{host}}/drinks/",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"drinks"
+								"drinks",
+								""
 							]
 						}
 					},
@@ -510,16 +756,29 @@
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"value contains drinks array\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.drinks).to.be.an('array')",
-									"});"
+									"if(pm.response.to.have.status(200))",
+									"{",
+									"    pm.test(\"value contains drinks object\", function () {",
+									"        var jsonData = pm.response.json();",
+									"        pm.expect(jsonData.drinks).to.be.an('object')",
+									"    });",
+									"}"
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [
 							{
@@ -531,16 +790,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Water5\"\n}"
+							"raw": "{\n\t\"title\":\"Patch Drink #{{drink_id}}\",\n\n\t\"recipe\":[\n\t  {\n\t     \"color\":\"#{{c_3}}\",\n\t     \"name\":\"Vodka\",\n\t     \"parts\":\"{{r_3}}\"\n\t  },\n\t  {\n\t     \"color\":\"#{{c_1}}\",\n\t     \"name\":\"Black Tea\",\n\t     \"parts\":\"{{r_1}}\"\n\t  },\n\t  {\n\t     \"color\":\"#{{c_2}}\",\n\t     \"name\":\"Orange Juice\",\n\t     \"parts\":\"{{r_2}}\"\n\t  }\t\t  \n\t]\t\n}\n\n"
 						},
 						"url": {
-							"raw": "{{host}}/drinks/1",
+							"raw": "{{host}}/drinks/{{drink_id}}",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"drinks",
-								"1"
+								"{{drink_id}}"
 							]
 						}
 					},
@@ -563,16 +822,26 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{mytoken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/drinks/1",
+							"raw": "{{host}}/drinks/{{drink_id}}",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"drinks",
-								"1"
+								"{{drink_id}}"
 							]
 						}
 					},
@@ -610,7 +879,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -637,10 +907,17 @@
 	],
 	"variable": [
 		{
-			"id": "7da0fa13-ecd9-4d7d-8e38-fde2c81cfdaf",
+			"id": "8ec754f2-7dfa-4cbd-a39c-95f6cafb2b37",
 			"key": "host",
-			"value": "localhost:5000",
+			"value": "127.0.0.1:57959",
+			"type": "string"
+		},
+		{
+			"id": "e9bb12cb-0dfd-4647-937b-73d506f91dc5",
+			"key": "mytoken",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VSkRPVE5CTkRVek16TXpPREk1UVRSRU56WkZOa00zTWpoRU9FVXhSVUkxUlVaRU0wTXlNQSJ9.eyJpc3MiOiJodHRwczovL2FjbTEyMy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDgxMDIzMDU4MTI3NDU2MDA3NTciLCJhdWQiOlsiaW1hZ2UiLCJodHRwczovL2FjbTEyMy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNTc1ODM0MjE3LCJleHAiOjE1NzU4NDE0MTcsImF6cCI6IjFMOXh3NXMwWEdENXBvODJvTDZMb0dKeExPS05ZSnRQIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTpkcmlua3MiLCJnZXQ6ZHJpbmtzLWRldGFpbCIsImdldDppbWFnZXMiLCJwYXRjaDpkcmlua3MiLCJwb3N0OmRyaW5rcyIsInBvc3Q6aW1hZ2VzIl19.evWJMOVDedEAcoxYY_Tz2mt8qL2fb8AgetGeDFYHNB894C0oW-zApO685TvrWkA3MvhwlxzR38LZVEyC4WRJCcv-DLZmZUkL-61o4D2agBFGHsgJiGOJx-rouNedKSE6iU2IJqwjeZ8Nu32ddWeBvCQnOgRhK0JtsCIigS-91iaxuESyB5bE466pOENMTaWUpo9TJOn8V_DntaJyyQWNQB30PAOXR0kDERZt2NJu8hxL7YLR5dKoC4OKl_mveoVbGGay-0cLOR9WzPBmTVQvr_ECsuXOocCfRQnlcSArJMRk5xX10bQmFjG-jrf_gfvTIgoHAfsCZKsRwIcGJJR2hg",
 			"type": "string"
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

@@ -37,7 +37,7 @@ def short_drinks():
         return jsonify(response)
 
 # Get Short Drinks by ID
-@app.route('/drinks/<int:id>', methods=['GET'])
+@app.route('/drinks/<int:id>', methods=['GET'], strict_slashes=False)
 def short_drinks_by_id(id):
     data = Drink.query.filter_by(id=id).first()
 
@@ -71,7 +71,7 @@ def long_drinks(jwt):
 
 
 # Add a drink
-@app.route('/drinks', methods=['POST'])
+@app.route('/drinks', methods=['POST'], strict_slashes=False)
 @cross_origin()  # Handling CORs at the route level is more granular.
 @requires_auth('post:drinks')
 def add_drinks(jwt):
@@ -85,13 +85,14 @@ def add_drinks(jwt):
         # Make sure title and recipe are not blank
         if req_data['title'] != '' and req_data['recipe'] != '':
             try:
-                new_drink = Drink(title= req_data['title'], recipe=json.dumps(req_data['recipe'])).insert()
+                new_drink = Drink(title=req_data['title'], recipe=json.dumps(
+                    req_data['recipe'])).insert()
                 response = {
                     'success': True,
                     'drinks': new_drink
                 }
                 return jsonify(response)
-            except exc.IntegrityError as e:
+            except exc.IntegrityError:
                 abort(409)
         else:
             abort(400)
@@ -101,7 +102,7 @@ def add_drinks(jwt):
 # @TODO 'patch:drinks' permission
 
 # Update a drink
-@app.route('/drinks/<int:id>', methods=['PATCH'])
+@app.route('/drinks/<int:id>', methods=['PATCH'], strict_slashes=False)
 @cross_origin()  # Handling CORs at the route level is more granular.
 @requires_auth('patch:drinks')
 def update_drinks(jwt, id):
@@ -125,7 +126,7 @@ def update_drinks(jwt, id):
                         'drinks': drinks
                     }
                     return jsonify(response)
-                except exc.IntegrityError as e:
+                except exc.IntegrityError:
                     abort(409)
             else:
                 abort(400)
@@ -134,7 +135,7 @@ def update_drinks(jwt, id):
 
 
 # Delete drinks by ID
-@app.route('/drinks/<int:id>', methods=['DELETE'])
+@app.route('/drinks/<int:id>', methods=['DELETE'], strict_slashes=False)
 @requires_auth('delete:drinks')
 def delete_drinks(jwt, id):
     data = Drink.query.filter_by(id=id).one_or_none()
@@ -159,14 +160,16 @@ def bad_request(error):
     }
     return jsonify(response), 400
 
+
 @app.errorhandler(401)
-def bad_request(error):
+def unauth(error):
     response = {
         "success": False,
         "error": 401,
         "message": "Unauthorized"
     }
     return jsonify(response), 401
+
 
 @app.errorhandler(404)
 def resource_not_found(error):
@@ -177,14 +180,16 @@ def resource_not_found(error):
     }
     return jsonify(response), 404
 
+
 @app.errorhandler(409)
-def resource_not_found(error):
+def conflict(error):
     response = {
         "success": False,
         "error": 409,
         "message": "Conflict"
     }
     return jsonify(response), 409
+
 
 @app.errorhandler(422)
 def unprocessable_entity(error):
@@ -195,6 +200,7 @@ def unprocessable_entity(error):
     }
     return jsonify(response), 422
 
+
 @app.errorhandler(500)
 def internal_server_error(error):
     response = {
@@ -204,10 +210,12 @@ def internal_server_error(error):
     }
     return jsonify(response), 500
 
+
 '''
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 '''
+
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
