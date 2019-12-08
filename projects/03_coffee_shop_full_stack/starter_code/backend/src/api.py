@@ -85,7 +85,7 @@ def add_drinks(jwt):
         # Make sure title and recipe are not blank
         if req_data['title'] != '' and req_data['recipe'] != '':
             try:
-                new_drink = Drink(title= req_data['title'], recipe=str(req_data['recipe'])).insert()
+                new_drink = Drink(title= req_data['title'], recipe=json.dumps(req_data['recipe'])).insert()
                 response = {
                     'success': True,
                     'drinks': new_drink
@@ -116,7 +116,7 @@ def update_drinks(jwt, id):
         if 'title' in req_data and 'recipe' in req_data:
             if req_data['title'] != '' and req_data['recipe'] != '':
                 data.title = req_data['title']
-                data.recipe = str(req_data['recipe'])
+                data.recipe = json.dumps(req_data['recipe'])
                 try:
                     data.update()
                     drinks = data.long()
@@ -159,6 +159,15 @@ def bad_request(error):
     }
     return jsonify(response), 400
 
+@app.errorhandler(401)
+def bad_request(error):
+    response = {
+        "success": False,
+        "error": 401,
+        "message": "Unauthorized"
+    }
+    return jsonify(response), 401
+
 @app.errorhandler(404)
 def resource_not_found(error):
     response = {
@@ -199,3 +208,9 @@ def internal_server_error(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 '''
+
+@app.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
