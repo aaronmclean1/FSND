@@ -230,7 +230,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -278,7 +278,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -325,7 +325,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -376,7 +376,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -428,7 +428,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -566,7 +566,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -661,7 +661,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -713,7 +713,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -774,7 +774,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -827,7 +827,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{mytoken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -907,15 +907,21 @@
 	],
 	"variable": [
 		{
-			"id": "8ec754f2-7dfa-4cbd-a39c-95f6cafb2b37",
+			"id": "19bf7672-1903-4679-8607-a064003ba31f",
 			"key": "host",
 			"value": "127.0.0.1:57959",
 			"type": "string"
 		},
 		{
-			"id": "e9bb12cb-0dfd-4647-937b-73d506f91dc5",
-			"key": "mytoken",
-			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VSkRPVE5CTkRVek16TXpPREk1UVRSRU56WkZOa00zTWpoRU9FVXhSVUkxUlVaRU0wTXlNQSJ9.eyJpc3MiOiJodHRwczovL2FjbTEyMy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDgxMDIzMDU4MTI3NDU2MDA3NTciLCJhdWQiOlsiaW1hZ2UiLCJodHRwczovL2FjbTEyMy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNTc1ODM0MjE3LCJleHAiOjE1NzU4NDE0MTcsImF6cCI6IjFMOXh3NXMwWEdENXBvODJvTDZMb0dKeExPS05ZSnRQIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTpkcmlua3MiLCJnZXQ6ZHJpbmtzLWRldGFpbCIsImdldDppbWFnZXMiLCJwYXRjaDpkcmlua3MiLCJwb3N0OmRyaW5rcyIsInBvc3Q6aW1hZ2VzIl19.evWJMOVDedEAcoxYY_Tz2mt8qL2fb8AgetGeDFYHNB894C0oW-zApO685TvrWkA3MvhwlxzR38LZVEyC4WRJCcv-DLZmZUkL-61o4D2agBFGHsgJiGOJx-rouNedKSE6iU2IJqwjeZ8Nu32ddWeBvCQnOgRhK0JtsCIigS-91iaxuESyB5bE466pOENMTaWUpo9TJOn8V_DntaJyyQWNQB30PAOXR0kDERZt2NJu8hxL7YLR5dKoC4OKl_mveoVbGGay-0cLOR9WzPBmTVQvr_ECsuXOocCfRQnlcSArJMRk5xX10bQmFjG-jrf_gfvTIgoHAfsCZKsRwIcGJJR2hg",
+			"id": "28eb9327-c32b-421c-836a-a9f0fd0237bb",
+			"key": "manager_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "79d37d2b-b734-4374-8898-040647ec4139",
+			"key": "barista_token",
+			"value": "",
 			"type": "string"
 		}
 	],
